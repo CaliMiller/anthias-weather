@@ -102,3 +102,7 @@ python3 -m unittest discover -s tests -v
 ## Roadmap
 
 - A Home Assistant integration, so Home Assistant can switch modes alongside or instead of the built-in NWS check.
+
+## Credits
+
+- Code and design developed in collaboration with Claude (Anthropic).
