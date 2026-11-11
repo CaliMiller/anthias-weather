@@ -1,0 +1,63 @@
+# anthias-weather configuration
+# Installed to /etc/anthias-weather/config.toml. After editing:
+#   sudo anthias-weather check
+#   sudo systemctl restart anthias-weather
+
+[anthias]
+# Anthias runs on this same PC, so localhost on port 80 is right.
+url = "http://127.0.0.1"
+# Only needed if you turned on authentication in Anthias (Settings > Authentication).
+# username = "admin"
+# password = "your-anthias-password"
+
+[alert_mode]
+# The assets left playing during a warning, matched by their exact name in the
+# Anthias dashboard (capitalization doesn't matter). Run
+#   anthias-weather list-assets
+# to see the names. The first one is shown immediately when a warning starts.
+# An asset that is normally disabled is fine here: it's enabled for the
+# warning and disabled again afterwards.
+assets = ["Weather Alerts", "Weather Radar"]
+
+# Seconds to wait after changing the playlist before switching the screen,
+# so the Anthias viewer has picked up the change.
+switch_delay_seconds = 3
+
+[nws]
+# Your location as "latitude,longitude" (up to 4 decimal places).
+# With a point, alert mode starts only when your location is inside a warning.
+# Tornado and severe thunderstorm warnings are drawn as polygons, often smaller
+# than a county, so this is the most precise option.
+point = "39.7684,-86.1581"
+
+# Optional instead of, or in addition to, the point: NWS zone or county codes.
+# A county code (like INC097) triggers whenever any part of that county is
+# warned. Find yours at https://api.weather.gov/points/<lat>,<lon>
+# (the "county" and "forecastZone" links end with the code).
+# zones = ["INC097"]
+
+# Exact NWS event names that start alert mode. Watches, advisories and
+# statements are ignored unless you list them.
+events = [
+  "Tornado Warning",
+  "Severe Thunderstorm Warning",
+  # "Extreme Wind Warning",
+  # "Flash Flood Warning",
+  # "Tornado Watch",
+]
+
+# The NWS API asks every client to identify itself with contact information.
+# Replace the email with your own; it's sent only to api.weather.gov.
+user_agent = "anthias-weather (you@example.com)"
+
+# How often to check for alerts, in seconds (minimum 30).
+poll_seconds = 60
+
+# How many polls in a row must show no matching alerts before the normal
+# playlist resumes. 2 avoids flipping back during a momentary gap between an
+# expiring warning and its replacement.
+clear_after_polls = 2
+
+[service]
+state_dir = "/var/lib/anthias-weather"
+http_timeout_seconds = 15

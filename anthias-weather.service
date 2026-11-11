@@ -1,0 +1,23 @@
+[Unit]
+Description=Anthias weather alert mode (NWS warnings take over the signage playlist)
+Documentation=file:///opt/anthias-weather/README.md
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+
+[Service]
+Type=simple
+User=anthias-weather
+Group=anthias-weather
+ExecStart=/usr/bin/python3 /opt/anthias-weather/anthias_weather.py --config /etc/anthias-weather/config.toml run
+Restart=always
+RestartSec=10
+
+# Hardening: this service only needs the network and its own state folder.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/anthias-weather
+
+[Install]
+WantedBy=multi-user.target
